@@ -34,17 +34,17 @@ public class CameraFollow2D : MonoBehaviour {
 			}
 		}
 
-		// Y Axis
-		float dy = LookAt.position.y - transform.position.y;
+        //// Y Axis
+        //float dy = LookAt.position.y - transform.position.y;
 			
-		if(dy > boundY || dy < -boundY) {
+        //if(dy > boundY || dy < -boundY) {
 
-			if(transform.position.y < LookAt.position.y) {
-				delta.y = dy - boundY;
-			} else {
-				delta.y = dy + boundY;
-			}
-		}
+        //    if(transform.position.y < LookAt.position.y) {
+        //        delta.y = dy - boundY;
+        //    } else {
+        //        delta.y = dy + boundY;
+        //    }
+        //}
 
 		// Move camera
 		transform.position = transform.position + delta;
