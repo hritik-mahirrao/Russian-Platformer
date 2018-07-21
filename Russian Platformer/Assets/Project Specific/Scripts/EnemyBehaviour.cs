@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public Transform Player;
-    public Transform[] Patrol_Points;
-
-    public float maxSpeed;
-    public float moveSpeed;
-    int currentWayPoint = 0;
-
-    public float lookRadiusOuter, lookRadiusInner;
+    // Game Object
+    public Transform Hero;
 
 
-    private Rigidbody2D enemyRigidBody2D;
-    private Animator enemyAnimatorController;
+    // State change distances
+    public float alertDistance;
+    public float walkDistance;
+    public float meleDistance;
 
+    public float runSpeed;
+    public float walkSpeed;
 
-    private bool m_FacingRight = true;  // For determining which way the enemy is currently facing.
-
-
+    // States
+    public Enemy_States enemy_state;
     public enum Enemy_States
     {
         //Idle,
@@ -32,59 +29,82 @@ public class EnemyBehaviour : MonoBehaviour
         Fallen
     };
 
-    public Enemy_States enemy_state;
+    private Rigidbody2D enemyRigidBody2D;
+    private bool isAlert = false;
 
     // Use this for initialization
     void Start()
     {
-        Player = GameObject.Find("CharacterRobotBoy").GetComponent<Transform>();
-        enemyRigidBody2D = GetComponent<Rigidbody2D>();
-        enemyAnimatorController = GetComponent<Animator>();
+        //Player = GameObject.Find("CharacterRobotBoy").GetComponent<Transform>();
+        //enemyRigidBody2D = GetComponent<Rigidbody2D>();
+        //enemyAnimatorController = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Enemy_State_Management();
-        Enemy_Movement();
+        updatePlayer();
     }
 
-
-    void Enemy_State_Management()
+    void updatePlayer()
     {
-        if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusOuter)
-        {
-            enemy_state = Enemy_States.ChasePlayer;
-        }
 
-        if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusInner)
+        //Vector2 distanceFromPlayer = Vector2.Distance(transform.position, Player.transform.position);
+        if (!isAlert && distanceFromPlayer.x < alertDistance)
         {
-            enemy_state = Enemy_States.Attack;
+            // Alert the enemy
+            isAlert = true;
         }
-
+        else if (distanceFromPlayer.x <= meleDistance)
+        {
+            // Trans position
+            // Mele combact
+        }
+        else if (distanceFromPlayer.x <= walkDistance)
+        {
+            // Start walking towards Hero
+        }
         else
         {
-            enemy_state = Enemy_States.Patrol;
+            // Run towards Hero
         }
-
     }
+
+    //void Enemy_State_Management()
+    //{
+    //    if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusOuter)
+    //    {
+    //        enemy_state = Enemy_States.ChasePlayer;
+    //    }
+
+    //    if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusInner)
+    //    {
+    //        enemy_state = Enemy_States.Attack;
+    //    }
+
+    //    else
+    //    {
+    //        enemy_state = Enemy_States.Patrol;
+    //    }
+
+    //}
 
     void Enemy_Movement()
     {
         if (enemy_state == Enemy_States.Patrol)
         {
 
-            if (Vector2.Distance(transform.position, Patrol_Points[currentWayPoint].transform.position) < 2)
-            {
-                currentWayPoint++;
-            }
+            // if (Vector2.Distance(transform.position, Patrol_Points[currentWayPoint].transform.position) < 2)
+            // {
+            //     currentWayPoint++;
+            // }
 
-            if (currentWayPoint >= Patrol_Points.Length - 1)
-            {
-                currentWayPoint = 0;
-            }
+            // if (currentWayPoint >= Patrol_Points.Length - 1)
+            // {
+            //     currentWayPoint = 0;
+            // }
 
-            enemyRigidBody2D.velocity = new Vector2(moveSpeed * maxSpeed, enemyRigidBody2D.velocity.y);
+            // transform.position = Vector2.MoveTowards(transform.position, Patrol_Points[currentWayPoint].transform.position, 0.3f);
 
             //transform.position = Vector2.MoveTowards(transform.position, new Vector2(Patrol_Points[currentWayPoint].transform.position.x, transform.position.y), Time.deltaTime * moveSpeed);
             enemyAnimatorController.SetFloat("Speed", Mathf.Abs(moveSpeed));
