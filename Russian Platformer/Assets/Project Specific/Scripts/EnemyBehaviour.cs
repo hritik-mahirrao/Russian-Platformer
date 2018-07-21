@@ -4,23 +4,19 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public Transform Player;
-    public Transform[] Patrol_Points;
+    // Game Object
+    public GameObject Hero;
 
-    public float maxSpeed;
-    public float moveSpeed;
-    int currentWayPoint = 0;
+    // State change distances
+    public float alertDistance;
+    public float walkDistance;
+    public float meleDistance;
 
-    public float lookRadiusOuter, lookRadiusInner;
+    public float runSpeed;
+    public float walkSpeed;
 
-
-    private Rigidbody2D enemyRigidBody2D;
-    private Animator enemyAnimatorController;
-
-
-    private bool m_FacingRight = true;  // For determining which way the enemy is currently facing.
-
-
+    // States
+    public Enemy_States enemy_state;
     public enum Enemy_States
     {
         //Idle,
@@ -32,104 +28,126 @@ public class EnemyBehaviour : MonoBehaviour
         Fallen
     };
 
-    public Enemy_States enemy_state;
+    private Rigidbody2D enemyRigidBody2D;
+    private bool isAlert = false;
 
     // Use this for initialization
     void Start()
     {
-        Player = GameObject.Find("CharacterRobotBoy").GetComponent<Transform>();
-        enemyRigidBody2D = GetComponent<Rigidbody2D>();
-        enemyAnimatorController = GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Enemy_State_Management();
-        Enemy_Movement();
+        updatePlayer();
     }
 
+    void updatePlayer()
+    {
+
+        float distanceFromPlayer = Vector2.Distance(transform.position, Hero.transform.position);
+        if (!isAlert && distanceFromPlayer < alertDistance)
+        {
+            // Alert the enemy
+            isAlert = true;
+        }
+        else if (distanceFromPlayer <= meleDistance)
+        {
+            // Trans position
+            // Mele combact
+        }
+        else if (distanceFromPlayer <= walkDistance)
+        {
+            // Start walking towards Hero
+            transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, walkSpeed);
+        }
+        else
+        {
+            // Run towards Hero
+        }
+    }
 
     void Enemy_State_Management()
     {
-        if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusOuter)
-        {
-            enemy_state = Enemy_States.ChasePlayer;
-        }
+        //if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusOuter)
+        //{
+        //    enemy_state = Enemy_States.ChasePlayer;
+        //}
 
-        if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusInner)
-        {
-            enemy_state = Enemy_States.Attack;
-        }
+        //if (Vector2.Distance(transform.position, Player.transform.position) <= lookRadiusInner)
+        //{
+        //    enemy_state = Enemy_States.Attack;
+        //}
 
-        else
-        {
-            enemy_state = Enemy_States.Patrol;
-        }
+        //else
+        //{
+        //    enemy_state = Enemy_States.Patrol;
+        //}
 
     }
 
     void Enemy_Movement()
     {
-        if (enemy_state == Enemy_States.Patrol)
-        {
+        //if (enemy_state == Enemy_States.Patrol)
+        //{
 
-            if (Vector2.Distance(transform.position, Patrol_Points[currentWayPoint].transform.position) < 2)
-            {
-                currentWayPoint++;
-            }
+        //    // if (Vector2.Distance(transform.position, Patrol_Points[currentWayPoint].transform.position) < 2)
+        //    // {
+        //    //     currentWayPoint++;
+        //    // }
 
-            if (currentWayPoint >= Patrol_Points.Length - 1)
-            {
-                currentWayPoint = 0;
-            }
+        //    // if (currentWayPoint >= Patrol_Points.Length - 1)
+        //    // {
+        //    //     currentWayPoint = 0;
+        //    // }
 
-            enemyRigidBody2D.velocity = new Vector2(moveSpeed * maxSpeed, enemyRigidBody2D.velocity.y);
+        //    // transform.position = Vector2.MoveTowards(transform.position, Patrol_Points[currentWayPoint].transform.position, 0.3f);
 
-            //transform.position = Vector2.MoveTowards(transform.position, new Vector2(Patrol_Points[currentWayPoint].transform.position.x, transform.position.y), Time.deltaTime * moveSpeed);
-            enemyAnimatorController.SetFloat("Speed", Mathf.Abs(moveSpeed));
+        //    //transform.position = Vector2.MoveTowards(transform.position, new Vector2(Patrol_Points[currentWayPoint].transform.position.x, transform.position.y), Time.deltaTime * moveSpeed);
+        //    enemyAnimatorController.SetFloat("Speed", Mathf.Abs(moveSpeed));
 
-            //for (int i = 0; i < Patrol_Points.Length - 1; i++)
-            //{
-            //    if (Vector2.Distance(transform.position, Patrol_Points[i].transform.position) < 2)
-            //    {
+        //    //for (int i = 0; i < Patrol_Points.Length - 1; i++)
+        //    //{
+        //    //    if (Vector2.Distance(transform.position, Patrol_Points[i].transform.position) < 2)
+        //    //    {
 
-            //    }
-            //}
+        //    //    }
+        //    //}
 
-            // If the input is moving the enemy right and the player is facing left...
-            if (moveSpeed > 0 && !m_FacingRight)
-            {
-                // ... flip the player.
-                Flip();
-            }
-            // Otherwise if the input is moving the enemy left and the enemy is facing right...
-            else if (moveSpeed < 0 && m_FacingRight)
-            {
-                // ... flip the player.
-                Flip();
-            }
+        //    // If the input is moving the enemy right and the player is facing left...
+        //    if (moveSpeed > 0 && !m_FacingRight)
+        //    {
+        //        // ... flip the player.
+        //        Flip();
+        //    }
+        //    // Otherwise if the input is moving the enemy left and the enemy is facing right...
+        //    else if (moveSpeed < 0 && m_FacingRight)
+        //    {
+        //        // ... flip the player.
+        //        Flip();
+        //    }
 
-        }
+        //}
     }
 
 
-    private void Flip()
-    {
-        // Switch the way the player is labelled as facing.
-        m_FacingRight = !m_FacingRight;
+    //private void Flip()
+    //{
+    //    // Switch the way the player is labelled as facing.
+    //    m_FacingRight = !m_FacingRight;
 
-        // Multiply the player's x local scale by -1.
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
-    }
+    //    // Multiply the player's x local scale by -1.
+    //    Vector3 theScale = transform.localScale;
+    //    theScale.x *= -1;
+    //    transform.localScale = theScale;
+    //}
 
 
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, lookRadiusOuter);
-        Gizmos.DrawWireSphere(transform.position, lookRadiusInner);
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawWireSphere(transform.position, lookRadiusOuter);
+    //    Gizmos.DrawWireSphere(transform.position, lookRadiusInner);
 
-    }
+    //}
 }

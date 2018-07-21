@@ -113,6 +113,10 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &290139111 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100002, guid: 87a2357765801c34292d6718d8b4d770, type: 2}
+  m_PrefabInternal: {fileID: 2011109799}
 --- !u!1 &484901353
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,14 +634,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f8c0b3abc038f54480e8b88a3b28da8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 938379398}
-  Patrol_Points:
-  - {fileID: 1854925629}
-  - {fileID: 741824990}
-  maxSpeed: 10
-  moveSpeed: 3
-  lookRadiusOuter: 3.72
-  lookRadiusInner: 1.74
+  Hero: {fileID: 290139111}
+  alertDistance: 0
+  walkDistance: 5
+  meleDistance: 0
+  runSpeed: 0
+  walkSpeed: 0.1
   enemy_state: 0
 --- !u!1 &1435553433
 GameObject:
