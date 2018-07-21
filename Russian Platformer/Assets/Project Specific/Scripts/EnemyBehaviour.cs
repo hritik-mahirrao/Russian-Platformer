@@ -62,9 +62,10 @@ public class EnemyBehaviour : MonoBehaviour
             // Start walking towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, walkSpeed);
         }
-        else
+        else if(isAlert && distanceFromPlayer <= alertDistance)
         {
             // Run towards Hero
+            transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, runSpeed);
         }
     }
 
