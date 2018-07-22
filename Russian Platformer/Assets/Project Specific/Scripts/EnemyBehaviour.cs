@@ -54,28 +54,43 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Alert the enemy
             isAlert = true;
-            enemyAnimator.SetBool("Walk", true);
+            enemyAnimator.SetBool("Idle", true);
+            enemyAnimator.SetBool("Walk", false);
+            enemyAnimator.SetBool("Run", false);
+            enemyAnimator.SetBool("Trans", false);
 
         }
         else if (distanceFromPlayer <= meleDistance)
         {
             // Trans position
             // Mele combact
+            enemyAnimator.SetBool("Idle", false);
+            enemyAnimator.SetBool("Trans", true);
+            enemyAnimator.SetBool("Walk", false);
+            enemyAnimator.SetBool("Run", false);
         }
         else if (distanceFromPlayer <= walkDistance)
         {
             // Start walking towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, walkSpeed);
+            
+            enemyAnimator.SetBool("Idle", false);
+            enemyAnimator.SetBool("Trans", false);
             enemyAnimator.SetBool("Walk", true);
+            enemyAnimator.SetBool("Run", false);
         }
         else if (isAlert)
         {
             // Run towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, runSpeed);
+            
+            enemyAnimator.SetBool("Idle", false);
+            enemyAnimator.SetBool("Trans", false);
+            enemyAnimator.SetBool("Walk", false);
             enemyAnimator.SetBool("Run", true);
         }
 
-        float dir = enemyRigidBody2D.velocity.x;
+        float dir = transform.position.x - Hero.transform.position.x;
 
         if (dir < 0)
         {
