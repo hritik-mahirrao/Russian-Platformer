@@ -29,12 +29,15 @@ public class EnemyBehaviour : MonoBehaviour
     };
 
     private Rigidbody2D enemyRigidBody2D;
+    private Animator enemyAnimator;
     private bool isAlert = false;
+    //public bool m_FacingRight;
 
     // Use this for initialization
     void Start()
     {
-
+        enemyAnimator = GetComponent<Animator>();
+        enemyRigidBody2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -51,6 +54,8 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Alert the enemy
             isAlert = true;
+            enemyAnimator.SetBool("Walk", true);
+
         }
         else if (distanceFromPlayer <= meleDistance)
         {
@@ -61,12 +66,33 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Start walking towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, walkSpeed);
+            enemyAnimator.SetBool("Walk", true);
         }
-        else if(isAlert && distanceFromPlayer <= alertDistance)
+        else if (isAlert)
         {
             // Run towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, runSpeed);
+            enemyAnimator.SetBool("Run", true);
         }
+
+        float dir = enemyRigidBody2D.velocity.x;
+
+        if (dir < 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+
+        if (dir > 0)
+        {
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
+
+        //else
+        //{
+        //    enemyAnimator.SetBool("Walk", false);
+        //    enemyAnimator.SetBool("Run", false);
+        //}
+
     }
 
     void Enemy_State_Management()
@@ -116,39 +142,43 @@ public class EnemyBehaviour : MonoBehaviour
         //    //    }
         //    //}
 
-        //    // If the input is moving the enemy right and the player is facing left...
-        //    if (moveSpeed > 0 && !m_FacingRight)
+        // If the input is moving the enemy right and the player is facing left...
+        //    if (walkSpeed > 0 && !m_FacingRight)
         //    {
         //        // ... flip the player.
         //        Flip();
         //    }
         //    // Otherwise if the input is moving the enemy left and the enemy is facing right...
-        //    else if (moveSpeed < 0 && m_FacingRight)
+        //    else if (walkSpeed < 0 && m_FacingRight)
         //    {
         //        // ... flip the player.
         //        Flip();
         //    }
 
         //}
+
+        //private void Flip()
+        //{
+        //    // Switch the way the player is labelled as facing.
+        //    m_FacingRight = !m_FacingRight;
+
+        //    // Multiply the player's x local scale by -1.
+        //    Vector3 theScale = transform.localScale;
+        //    theScale.x *= -1;
+        //    transform.localScale = theScale;
+        //}
+
+
+
+
+
+
+
+        //void OnDrawGizmos()
+        //{
+        //    Gizmos.DrawWireSphere(transform.position, lookRadiusOuter);
+        //    Gizmos.DrawWireSphere(transform.position, lookRadiusInner);
+
+        //}
     }
-
-
-    //private void Flip()
-    //{
-    //    // Switch the way the player is labelled as facing.
-    //    m_FacingRight = !m_FacingRight;
-
-    //    // Multiply the player's x local scale by -1.
-    //    Vector3 theScale = transform.localScale;
-    //    theScale.x *= -1;
-    //    transform.localScale = theScale;
-    //}
-
-
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawWireSphere(transform.position, lookRadiusOuter);
-    //    Gizmos.DrawWireSphere(transform.position, lookRadiusInner);
-
-    //}
 }
