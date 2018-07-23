@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +33,10 @@ public class EnemyBehaviour : MonoBehaviour
     private Animator enemyAnimator;
     private bool isAlert = false;
     //public bool m_FacingRight;
+
+
+    public event EventHandler OnEnemyAttack;
+
 
     // Use this for initialization
     void Start()
@@ -68,12 +73,18 @@ public class EnemyBehaviour : MonoBehaviour
             enemyAnimator.SetBool("Trans", true);
             enemyAnimator.SetBool("Walk", false);
             enemyAnimator.SetBool("Run", false);
+
+            if (OnEnemyAttack != null)
+            {
+                OnEnemyAttack(this, EventArgs.Empty);
+            }
+
         }
         else if (distanceFromPlayer <= walkDistance)
         {
             // Start walking towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, walkSpeed);
-            
+
             enemyAnimator.SetBool("Idle", false);
             enemyAnimator.SetBool("Trans", false);
             enemyAnimator.SetBool("Walk", true);
@@ -83,7 +94,7 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Run towards Hero
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, runSpeed);
-            
+
             enemyAnimator.SetBool("Idle", false);
             enemyAnimator.SetBool("Trans", false);
             enemyAnimator.SetBool("Walk", false);

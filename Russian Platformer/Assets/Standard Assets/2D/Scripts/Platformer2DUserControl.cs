@@ -9,8 +9,10 @@ namespace UnityStandardAssets._2D
     {
         private PlatformerCharacter2D m_Character;
         private bool m_Jump;
-        private bool m_Knife;
-        private bool m_Kick;
+        public bool m_Knife;
+        public bool m_Kick;
+
+        public event EventHandler OnPlayerAttack;
 
         private void Awake()
         {
