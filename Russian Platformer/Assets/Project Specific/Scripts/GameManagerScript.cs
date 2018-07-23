@@ -19,7 +19,7 @@ public class GameManagerScript : MonoBehaviour
 
     private void OEA(object sender, System.EventArgs e)
     {
-        Debug.Log("hit");
+        // Debug.Log("hit");
         if (GameObject.Find("Bar").GetComponent<Transform>().localScale.x > 0)
         {
             playerHealthBar.localScale = new Vector3(GameObject.Find("Bar").GetComponent<Transform>().localScale.x - 0.006f, 1);
