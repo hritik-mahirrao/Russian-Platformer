@@ -44,5 +44,14 @@ namespace UnityStandardAssets._2D
             m_Kick = false;
 
         }
+
+        public void GotAttacked() {
+            Transform result = transform.Find("HealthBar").Find("Bar");
+
+            if (result)
+            {
+                result.localScale = new Vector3(result.localScale.x - 0.1f, result.localScale.y, result.localScale.z);
+            }
+        }
     }
 }

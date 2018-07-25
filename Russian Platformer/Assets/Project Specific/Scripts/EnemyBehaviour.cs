@@ -36,11 +36,9 @@ public class EnemyBehaviour : MonoBehaviour
     private Animator enemyAnimator;
     private bool isAlert = false;
     private string[] states = new string[] {"Idle", "Walk", "Run", "Trans", "Attack"};
-    //public bool m_FacingRight;
-
-
-    
-
+    private float attackTimer;
+    private float attackCoolDownTime = 3; //Seconds
+    private bool isAlive = true;
 
     // Use this for initialization
     void Start()
@@ -52,7 +50,10 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        updatePlayer();
+        if(isAlive)
+        {
+            updatePlayer();
+        }
     }
 
     void updatePlayer()
@@ -68,24 +69,21 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else if (distanceFromPlayer <= meleDistance)
         {
-            if(enemyAnimator.GetBool("Attack"))
-            {
-                resetAnimatorState("Trans");  
-            }
+            
+            resetAnimatorState("Trans");  
+            
+            attackTimer += Time.deltaTime;
 
-            int chance = UnityEngine.Random.Range(1,100);
-            if(chance == 1) {
+            if(attackTimer >= attackCoolDownTime) 
+            {
                 resetAnimatorState("Attack");
+                attackTimer = 0;
+                
                 if (OnEnemyAttack != null)
                 {
                     OnEnemyAttack(this, EventArgs.Empty);
                 }
             }
-
-            // if (OnEnemyAttack != null)
-            // {
-            //     OnEnemyAttack(this, EventArgs.Empty);
-            // }
 
         }
         else if (distanceFromPlayer <= walkDistance)
@@ -123,6 +121,29 @@ public class EnemyBehaviour : MonoBehaviour
         for (int i = 0; i < states.Length; i++){
             enemyAnimator.SetBool(states[i], false);
         }
-        enemyAnimator.SetBool(currentState, true);
+
+        if(currentState != "")
+        {
+            enemyAnimator.SetBool(currentState, true);
+        }
+        
+    }
+
+    public void GotAttacked() {
+        Transform result = transform.Find("HealthBar").Find("Bar");
+
+        if (result)
+        {
+            result.localScale = new Vector3(result.localScale.x - 0.2f, result.localScale.y, result.localScale.z);
+
+            enemyAnimator.SetFloat("Health", result.localScale.x);
+            
+            if(result.localScale.x < 0)
+            {   
+                isAlive = false;
+                resetAnimatorState("");
+            }
+            
+        }
     }
 }
