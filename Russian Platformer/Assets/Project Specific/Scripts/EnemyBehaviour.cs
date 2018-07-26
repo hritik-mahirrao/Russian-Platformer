@@ -51,7 +51,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isAlive && Hero.GetComponent<Platformer2DUserControl>().isHeroAlive)
+        if (isAlive && Hero.GetComponent<PlatformerCharacter2D>().isHeroAlive)
         {
             updatePlayer();
         }

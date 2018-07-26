@@ -26,6 +26,9 @@ namespace UnityStandardAssets._2D
         private Rigidbody2D m_Rigidbody2D;
         private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 
+
+        public bool isHeroAlive = true;
+        
         private void Awake()
         {
             // Setting up references.
@@ -48,10 +51,15 @@ namespace UnityStandardAssets._2D
                 if (colliders[i].gameObject != gameObject)
                     m_Grounded = true;
             }
-            m_Anim.SetBool("Ground", m_Grounded);
+            
+            if(isHeroAlive) 
+            {
+                m_Anim.SetBool("Ground", m_Grounded);
 
-            // Set the vertical animation
-            m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+                // Set the vertical animation
+                m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
+            }
+            
         }
 
 
@@ -120,6 +128,24 @@ namespace UnityStandardAssets._2D
             Vector3 theScale = transform.localScale;
             theScale.x *= -1;
             transform.localScale = theScale;
+        }
+
+        public void GotAttacked()
+        {
+            Transform result = transform.Find("HealthBar").Find("Bar");
+
+            if (result)
+            {
+                result.localScale = new Vector3(result.localScale.x - 0.1f, result.localScale.y, result.localScale.z);
+            }
+
+            if (result.localScale.x <= 0)
+            {
+                isHeroAlive = false;
+
+                // Call Dead animation here
+                m_Anim.SetBool("IsDead", true);
+            }
         }
     }
 }

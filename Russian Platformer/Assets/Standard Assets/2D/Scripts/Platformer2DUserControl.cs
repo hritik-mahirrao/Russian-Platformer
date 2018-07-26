@@ -12,7 +12,7 @@ namespace UnityStandardAssets._2D
         public bool m_Knife;
         public bool m_Kick;
 
-        public bool isHeroAlive = true;
+        // public bool isHeroAlive = true;
 
         public event EventHandler OnPlayerAttack;
 
@@ -47,19 +47,21 @@ namespace UnityStandardAssets._2D
 
         }
 
-        public void GotAttacked()
-        {
-            Transform result = transform.Find("HealthBar").Find("Bar");
+        // public void GotAttacked()
+        // {
+        //     Transform result = transform.Find("HealthBar").Find("Bar");
 
-            if (result)
-            {
-                result.localScale = new Vector3(result.localScale.x - 0.1f, result.localScale.y, result.localScale.z);
-            }
+        //     if (result)
+        //     {
+        //         result.localScale = new Vector3(result.localScale.x - 0.1f, result.localScale.y, result.localScale.z);
+        //     }
 
-            if (result.localScale.x <= 0)
-            {
-                isHeroAlive = false;
-            }
-        }
+        //     if (result.localScale.x <= 0)
+        //     {
+        //         isHeroAlive = false;
+
+        //         // Call Dead animation here
+        //     }
+        // }
     }
 }
