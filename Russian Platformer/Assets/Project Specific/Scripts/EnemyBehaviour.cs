@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets._2D;
 
 public class EnemyBehaviour : MonoBehaviour
 {
@@ -31,11 +32,11 @@ public class EnemyBehaviour : MonoBehaviour
 
     public event EventHandler OnEnemyAttack;
 
-    
+
     private Rigidbody2D enemyRigidBody2D;
     private Animator enemyAnimator;
     private bool isAlert = false;
-    private string[] states = new string[] {"Idle", "Walk", "Run", "Trans", "Attack"};
+    private string[] states = new string[] { "Idle", "Walk", "Run", "Trans", "Attack" };
     private float attackTimer;
     private float attackCoolDownTime = 3; //Seconds
     private bool isAlive = true;
@@ -50,7 +51,7 @@ public class EnemyBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isAlive)
+        if (isAlive && Hero.GetComponent<Platformer2DUserControl>().isHeroAlive)
         {
             updatePlayer();
         }
@@ -63,22 +64,22 @@ public class EnemyBehaviour : MonoBehaviour
         {
             // Alert the enemy
             isAlert = true;
-            
+
             resetAnimatorState("Idle");
 
         }
         else if (distanceFromPlayer <= meleDistance)
         {
-            
-            resetAnimatorState("Trans");  
-            
+
+            resetAnimatorState("Trans");
+
             attackTimer += Time.deltaTime;
 
-            if(attackTimer >= attackCoolDownTime) 
+            if (attackTimer >= attackCoolDownTime)
             {
                 resetAnimatorState("Attack");
                 attackTimer = 0;
-                
+
                 if (OnEnemyAttack != null)
                 {
                     OnEnemyAttack(this, EventArgs.Empty);
@@ -116,20 +117,22 @@ public class EnemyBehaviour : MonoBehaviour
 
     }
 
-    void resetAnimatorState(string currentState) 
+    void resetAnimatorState(string currentState)
     {
-        for (int i = 0; i < states.Length; i++){
+        for (int i = 0; i < states.Length; i++)
+        {
             enemyAnimator.SetBool(states[i], false);
         }
 
-        if(currentState != "")
+        if (currentState != "")
         {
             enemyAnimator.SetBool(currentState, true);
         }
-        
+
     }
 
-    public void GotAttacked() {
+    public void GotAttacked()
+    {
         Transform result = transform.Find("HealthBar").Find("Bar");
 
         if (result)
@@ -137,13 +140,18 @@ public class EnemyBehaviour : MonoBehaviour
             result.localScale = new Vector3(result.localScale.x - 0.2f, result.localScale.y, result.localScale.z);
 
             enemyAnimator.SetFloat("Health", result.localScale.x);
-            
-            if(result.localScale.x < 0)
-            {   
+
+            if (result.localScale.x < 0)
+            {
                 isAlive = false;
                 resetAnimatorState("");
             }
-            
+
         }
+    }
+
+    public void AttackOnHero()
+    {
+        Hero.GetComponent<Platformer2DUserControl>().GotAttacked();
     }
 }
