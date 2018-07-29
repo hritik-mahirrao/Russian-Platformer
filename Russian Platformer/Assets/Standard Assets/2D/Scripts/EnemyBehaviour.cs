@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets._2D;
 
+
 public class EnemyBehaviour : MonoBehaviour
 {
     // Game Object
@@ -31,7 +32,7 @@ public class EnemyBehaviour : MonoBehaviour
     };
 
     public event EventHandler OnEnemyAttack;
-
+    PlatformerCharacter2D platformerCharacter2D;
 
     private Rigidbody2D enemyRigidBody2D;
     private Animator enemyAnimator;
@@ -46,6 +47,7 @@ public class EnemyBehaviour : MonoBehaviour
     {
         enemyAnimator = GetComponent<Animator>();
         enemyRigidBody2D = GetComponent<Rigidbody2D>();
+        platformerCharacter2D = GameObject.Find("CharacterRobotBoy").GetComponent<PlatformerCharacter2D>();
     }
 
     // Update is called once per frame
@@ -152,6 +154,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void AttackOnHero()
     {
-        Hero.GetComponent<Platformer2DUserControl>().GotAttacked();
+        Hero.GetComponent<PlatformerCharacter2D>().GotAttacked();
     }
 }
+

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityStandardAssets._2D
@@ -28,7 +29,8 @@ namespace UnityStandardAssets._2D
 
 
         public bool isHeroAlive = true;
-        
+        public Transform currentEnemy;
+
         private void Awake()
         {
             // Setting up references.
@@ -51,15 +53,15 @@ namespace UnityStandardAssets._2D
                 if (colliders[i].gameObject != gameObject)
                     m_Grounded = true;
             }
-            
-            if(isHeroAlive) 
+
+            if (isHeroAlive)
             {
                 m_Anim.SetBool("Ground", m_Grounded);
 
                 // Set the vertical animation
                 m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
             }
-            
+
         }
 
 
@@ -147,5 +149,11 @@ namespace UnityStandardAssets._2D
                 m_Anim.SetBool("IsDead", true);
             }
         }
+
+        public void AttackOnEnemy()
+        {
+            GameObject.Find("Enemy").GetComponent<EnemyBehaviour>().GotAttacked();
+        }
+
     }
 }
