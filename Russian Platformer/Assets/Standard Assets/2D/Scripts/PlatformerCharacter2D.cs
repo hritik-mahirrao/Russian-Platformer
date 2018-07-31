@@ -146,7 +146,8 @@ namespace UnityStandardAssets._2D
                 isHeroAlive = false;
 
                 // Call Dead animation here
-                m_Anim.SetBool("IsDead", true);
+                // m_Anim.SetBool("IsDead", true);
+                m_Anim.SetTrigger("Dead");
             }
         }
 

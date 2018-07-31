@@ -139,17 +139,16 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (result)
         {
-            result.localScale = new Vector3(result.localScale.x - 0.2f, result.localScale.y, result.localScale.z);
-
-            enemyAnimator.SetFloat("Health", result.localScale.x);
-
-            if (result.localScale.x < 0)
-            {
-                isAlive = false;
-                resetAnimatorState("");
-            }
-
+            result.localScale = new Vector3(result.localScale.x - 0.1f, result.localScale.y, result.localScale.z);
         }
+
+        if (result.localScale.x < 0)
+        {
+            isAlive = false;
+            resetAnimatorState("");
+            enemyAnimator.SetTrigger("Dead");
+        }
+        
     }
 
     public void AttackOnHero()
