@@ -30,6 +30,7 @@ namespace UnityStandardAssets._2D
 
         public bool isHeroAlive = true;
         public Transform currentEnemy;
+        public static List<Transform> EnemyInRange;
 
         private void Awake()
         {
@@ -38,6 +39,7 @@ namespace UnityStandardAssets._2D
             m_CeilingCheck = transform.Find("CeilingCheck");
             m_Anim = GetComponent<Animator>();
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
+            EnemyInRange = new List<Transform>();
         }
 
 
@@ -62,6 +64,10 @@ namespace UnityStandardAssets._2D
                 m_Anim.SetFloat("vSpeed", m_Rigidbody2D.velocity.y);
             }
 
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Debug.Log("Count : " + EnemyInRange.Count);
+            }
         }
 
 
@@ -153,7 +159,10 @@ namespace UnityStandardAssets._2D
 
         public void AttackOnEnemy()
         {
-            GameObject.Find("Enemy").GetComponent<EnemyBehaviour>().GotAttacked();
+            for (int i = 0; i < EnemyInRange.Count; i++)
+            {
+                EnemyInRange[i].GetComponent<EnemyBehaviour>().GotAttacked();
+            }
         }
 
     }

@@ -73,6 +73,12 @@ public class EnemyBehaviour : MonoBehaviour
         else if (distanceFromPlayer <= meleDistance)
         {
 
+            if (this.isAlive && !PlatformerCharacter2D.EnemyInRange.Contains(this.transform))
+            {
+                PlatformerCharacter2D.EnemyInRange.Add(this.transform);
+                Debug.Log("Added : " + PlatformerCharacter2D.EnemyInRange[PlatformerCharacter2D.EnemyInRange.Count - 1].name);
+                //transform.GetComponent<SpriteRenderer>().color = Color.red;
+            }
             resetAnimatorState("Trans");
 
             attackTimer += Time.deltaTime;
@@ -89,6 +95,7 @@ public class EnemyBehaviour : MonoBehaviour
             }
 
         }
+
         else if (distanceFromPlayer <= walkDistance)
         {
             // Start walking towards Hero
@@ -102,6 +109,16 @@ public class EnemyBehaviour : MonoBehaviour
             transform.position = Vector2.MoveTowards(transform.position, Hero.transform.position, runSpeed);
 
             resetAnimatorState("Run");
+        }
+
+        if (distanceFromPlayer >= meleDistance)
+        {
+            if (PlatformerCharacter2D.EnemyInRange.Contains(this.transform))
+            {
+                Debug.Log("Removed : " + PlatformerCharacter2D.EnemyInRange[PlatformerCharacter2D.EnemyInRange.Count - 1].name);
+                PlatformerCharacter2D.EnemyInRange.Remove(this.transform);
+                //transform.GetComponent<SpriteRenderer>().color = Color.white;
+            }
         }
 
         // Flip character
@@ -135,7 +152,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     public void GotAttacked()
     {
-        Transform result = transform.Find("HealthBar").Find("Bar");
+        Transform result = this.transform.Find("HealthBar").Find("Bar");
 
         if (result)
         {
@@ -145,10 +162,12 @@ public class EnemyBehaviour : MonoBehaviour
         if (result.localScale.x < 0)
         {
             isAlive = false;
+            PlatformerCharacter2D.EnemyInRange.Remove(this.transform);
             resetAnimatorState("");
             enemyAnimator.SetTrigger("Dead");
+            transform.GetComponent<SpriteRenderer>().color = Color.red;
         }
-        
+
     }
 
     public void AttackOnHero()
