@@ -32,6 +32,9 @@ namespace UnityStandardAssets._2D
         public Transform currentEnemy;
         public static List<Transform> EnemyInRange;
 
+        Transform resultBar;
+        float startX;
+
         private void Awake()
         {
             // Setting up references.
@@ -40,6 +43,8 @@ namespace UnityStandardAssets._2D
             m_Anim = GetComponent<Animator>();
             m_Rigidbody2D = GetComponent<Rigidbody2D>();
             EnemyInRange = new List<Transform>();
+            resultBar = transform.Find("HealthBar").Find("Bar");
+            startX = resultBar.localScale.x;
         }
 
 
@@ -163,6 +168,18 @@ namespace UnityStandardAssets._2D
             {
                 EnemyInRange[i].GetComponent<EnemyBehaviour>().GotAttacked();
             }
+        }
+
+        public void OnCollisionEnter2D(Collision2D col)
+        {
+            Debug.Log("Other : " + col.gameObject.name);
+            Transform result = transform.Find("HealthBar").Find("Bar");
+
+            if (resultBar.localScale.x <= startX)
+            {
+                result.localScale = new Vector3(startX, result.localScale.y, result.localScale.z);
+            }
+
         }
 
     }

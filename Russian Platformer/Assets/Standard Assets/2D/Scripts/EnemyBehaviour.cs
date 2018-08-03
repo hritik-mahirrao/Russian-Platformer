@@ -166,6 +166,7 @@ public class EnemyBehaviour : MonoBehaviour
             resetAnimatorState("");
             enemyAnimator.SetTrigger("Dead");
             transform.GetComponent<SpriteRenderer>().color = Color.red;
+            StartCoroutine(TimeBeforeDestroy(2f));
         }
 
     }
@@ -174,5 +175,12 @@ public class EnemyBehaviour : MonoBehaviour
     {
         Hero.GetComponent<PlatformerCharacter2D>().GotAttacked();
     }
+
+    public IEnumerator TimeBeforeDestroy(float timeBeforeJump)
+    {
+        yield return new WaitForSeconds(timeBeforeJump);
+        Destroy(this.gameObject);
+    }
+
 }
 
